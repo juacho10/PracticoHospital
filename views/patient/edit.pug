@@ -1,0 +1,47 @@
+extends ../layout
+
+block content
+    h2.text-center ✏️ Editar Paciente
+    
+    form(method="POST", action=`/patient/update/${patient.id}`)
+        .form-row
+            .form-group
+                label(for="dni") DNI:
+                input(type="text", id="dni", name="dni", required, value=patient.dni)
+            .form-group
+                label(for="first_name") Nombre:
+                input(type="text", id="first_name", name="first_name", required, value=patient.first_name)
+            .form-group
+                label(for="last_name") Apellido:
+                input(type="text", id="last_name", name="last_name", required, value=patient.last_name)
+        
+        .form-row
+            .form-group
+                label(for="birth_date") Fecha de Nacimiento:
+                input(type="date", id="birth_date", name="birth_date", required, value=new Date(patient.birth_date).toISOString().split('T')[0])
+            .form-group
+                label(for="gender") Género:
+                select(id="gender", name="gender", required)
+                    option(value="M", selected=patient.gender === 'M') Masculino
+                    option(value="F", selected=patient.gender === 'F') Femenino
+                    option(value="O", selected=patient.gender === 'O') Otro
+        
+        .form-group
+            label(for="address") Dirección:
+            input(type="text", id="address", name="address", value=patient.address)
+        
+        .form-row
+            .form-group
+                label(for="phone") Teléfono:
+                input(type="text", id="phone", name="phone", value=patient.phone)
+            .form-group
+                label(for="email") Email:
+                input(type="email", id="email", name="email", value=patient.email)
+        
+        .form-group
+            label(for="insurance") Seguro Médico:
+            input(type="text", id="insurance", name="insurance", value=patient.insurance)
+        
+        .form-actions
+            button(type="submit") Guardar Cambios
+            a.button.button-secondary(href="/patient/list") Cancelar

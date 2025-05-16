@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  h2 Asignar Cama al Paciente
+  form(method="POST", action="/admission/assign-bed")
+    input(type="hidden", name="admissionId", value=admissionId)
+    each deptBeds, dept in availableBeds
+      if deptBeds.length > 0
+        h3= dept.charAt(0).toUpperCase() + dept.slice(1)
+        .bed-selection
+          each bed in deptBeds
+            .bed-option
+              input(type="radio", id=`bed-${bed.id}`, name="bedId", value=bed.id, required)
+              label(for=`bed-${bed.id}`)
+                | Ala #{bed.wing}, Habitación #{bed.room_number}, Cama #{bed.bed_number}
+    button(type="submit") Asignar Cama
+
+

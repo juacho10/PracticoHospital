@@ -1,0 +1,60 @@
+extends ../layout
+
+block content
+    h2 Registrar Paciente para Admisión
+    form(method="POST", action="/admission/register")
+        .form-row
+            .form-group
+                label(for="dni") DNI:
+                input(type="text", id="dni", name="dni", required, value=formData ? formData.dni : '')
+            .form-group
+                label(for="first_name") Nombre:
+                input(type="text", id="first_name", name="first_name", required, value=formData ? formData.first_name : '')
+            .form-group
+                label(for="last_name") Apellido:
+                input(type="text", id="last_name", name="last_name", required, value=formData ? formData.last_name : '')
+        
+        .form-row
+            .form-group
+                label(for="birth_date") Fecha de Nacimiento:
+                input(type="date", id="birth_date", name="birth_date", required, value=formData ? formData.birth_date : '')
+            .form-group
+                label(for="gender") Género:
+                select(id="gender", name="gender", required)
+                    option(value="M") Masculino
+                    option(value="F") Femenino
+                    option(value="O") Otro
+        
+        .form-group
+            label(for="address") Dirección:
+            input(type="text", id="address", name="address", value=formData ? formData.address : '')
+        
+        .form-row
+            .form-group
+                label(for="phone") Teléfono:
+                input(type="text", id="phone", name="phone", value=formData ? formData.phone : '')
+            .form-group
+                label(for="email") Email:
+                input(type="email", id="email", name="email", value=formData ? formData.email : '')
+        
+        .form-group
+            label(for="insurance") Seguro Médico:
+            input(type="text", id="insurance", name="insurance", value=formData ? formData.insurance : '')
+        
+        h3 Datos de Admisión
+        .form-row
+            .form-group
+                label(for="admission_type") Tipo de Admisión:
+                select(id="admission_type", name="admission_type", required)
+                    each type in admissionTypes
+                        option(value=type)= type.charAt(0).toUpperCase() + type.slice(1)
+            .form-group
+                label(for="referring_doctor") Médico Referente (si aplica):
+                input(type="text", id="referring_doctor", name="referring_doctor", value=formData ? formData.referring_doctor : '')
+        
+        .form-group
+            label(for="reason") Motivo de Admisión:
+            textarea(id="reason", name="reason", rows="3", required)= formData ? formData.reason : ''
+        
+        button(type="submit") Registrar Paciente
+

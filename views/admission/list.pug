@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+  h2.text-center 🏥 Pacientes Admitidos
+  table
+    thead
+      tr
+        th DNI
+        th Paciente
+        th Fecha Admisión
+        th Tipo
+        th Habitación/Cama
+        th Departamento
+        th Acciones
+    tbody
+      each admission in admissions
+        tr
+          td= admission.dni
+          td= `${admission.last_name}, ${admission.first_name}`
+          td= new Date(admission.admission_date).toLocaleString()
+          td= admission.admission_type
+          td= admission.room_number ? `${admission.room_number}/${admission.bed_number}` : 'Sin asignar'
+          td= admission.department ? admission.department : 'N/A'
+          td
+            form.inline-form(method="POST", action=`/admission/discharge/${admission.id}`)
+              button.button.button-success(type="submit") Alta
+  .text-center
+    a.button(href="/admission/register") ➕ Nuevo Paciente
+    | 
+    a.button(href="/") ↩️ Volver al Inicio

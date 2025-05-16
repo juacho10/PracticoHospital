@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    h2 Bienvenido al Sistema de Admisión Hospitalaria
+    .dashboard
+        if user.role === 'admin' || user.role === 'receptionist'
+            .card
+                h3 Registrar Nuevo Paciente
+                p Admisión de pacientes nuevos o existentes
+                a.button(href="/admission/register") Ir a Registro
+        .card
+            h3 Pacientes Admitidos
+            p Ver lista de pacientes actualmente admitidos
+            a.button(href="/admission/list") Ver Lista

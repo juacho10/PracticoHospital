@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+    h2.text-center 👥 Lista de Pacientes
+    if success
+        .alert.alert-success ✅ #{success}
+    table
+        thead
+            tr
+                th DNI
+                th Nombre
+                th Apellido
+                th Fecha Nacimiento
+                th Género
+                th Acciones
+        tbody
+            each patient in patients
+                tr
+                    td= patient.dni
+                    td= patient.first_name
+                    td= patient.last_name
+                    td= new Date(patient.birth_date).toLocaleDateString()
+                    td= patient.gender === 'M' ? 'Masculino' : patient.gender === 'F' ? 'Femenino' : 'Otro'
+                    td
+                        a.button(href=`/patient/edit/${patient.id}`) Editar
+                        |  
+                        a.button.button-danger(href=`/patient/delete/${patient.id}` onclick="return confirm('¿Está seguro que desea eliminar este paciente?')") Eliminar
+    
+    .text-center
+        a.button(href="/") Volver al Inicio
