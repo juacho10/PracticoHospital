@@ -1,0 +1,23 @@
+{
+  "name": "his-hospital",
+  "version": "1.0.0",
+  "description": "Sistema de Admisión Hospitalaria",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "font-awesome": "^4.7.0",
+    "mysql2": "^3.6.2",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
