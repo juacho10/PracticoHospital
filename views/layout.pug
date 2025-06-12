@@ -1,29 +1,144 @@
 doctype html
 html(lang="es")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title #{title} | HIS Hospital
-        link(rel="stylesheet", href="/css/style.css")
-        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
-    body
-        header
-            .container
-                h1.text-center 🏥 Sistema de Admisión Hospitalaria
-                nav
-                    if user
-                        span Bienvenido, #{user.full_name} (#{user.role})
-                        a(href="/") 🏠 Inicio
-                        a(href="/admission/list") 🧑‍⚕️ Pacientes Admitidos
-                        a(href="/patient/list") 👥 Todos los Pacientes
-                        a(href="/auth/logout") 🔒 Cerrar Sesión
-        main.container
-            if error
-                .alert.alert-danger ⚠️ #{error}
-            if success
-                .alert.alert-success ✅ #{success}
-            block content
-        footer
-            .container
-                p.text-center © 2023 Hospital Information System
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="description", content="Sistema de Gestión Hospitalaria - HIS Hospital")
+    meta(name="theme-color", content="#2c3e50")
+    meta(name="robots", content="noindex, nofollow")
+    title #{title} | HIS Hospital
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/css/style.css")
+    block styles
 
+  body
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
+      .container-fluid
+        a.navbar-brand(href="/")
+          i.fas.fa-hospital.me-2
+          | HIS Hospital
+        button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarNav")
+          span.navbar-toggler-icon
+        .collapse.navbar-collapse#navbarNav
+          ul.navbar-nav.me-auto
+            if user
+              li.nav-item
+                a.nav-link(href="/")
+                  i.fas.fa-home.me-1
+                  | Inicio
+              if ['admin', 'recepcionista'].includes(user.role)
+                li.nav-item.dropdown
+                  a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown")
+                    i.fas.fa-procedures.me-1
+                    | Admisiones
+                  ul.dropdown-menu
+                    li
+                      a.dropdown-item(href="/admission/register")
+                        i.fas.fa-user-plus.me-1
+                        | Nueva Admisión
+                    li
+                      a.dropdown-item(href="/admission/list")
+                        i.fas.fa-list.me-1
+                        | Lista de Admisiones
+              li.nav-item
+                a.nav-link(href="/patient/list")
+                  i.fas.fa-users.me-1
+                  | Pacientes
+              if user.role === 'admin'
+                li.nav-item.dropdown
+                  a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown")
+                    i.fas.fa-cog.me-1
+                    | Administración
+                  ul.dropdown-menu
+                    li
+                      a.dropdown-item(href="/bed/list")
+                        i.fas.fa-bed.me-1
+                        | Gestión de Camas
+                    li
+                      a.dropdown-item(href="#")
+                        i.fas.fa-user-md.me-1
+                        | Personal Médico
+
+          ul.navbar-nav
+            if user
+              li.nav-item.dropdown
+                a.nav-link.dropdown-toggle(href="#", role="button", data-bs-toggle="dropdown")
+                  i.fas.fa-user-circle.me-1
+                  | #{user.full_name} (#{user.role})
+                ul.dropdown-menu.dropdown-menu-end
+                  li
+                    a.dropdown-item(href="#")
+                      i.fas.fa-user-cog.me-1
+                      | Mi Perfil
+                  li
+                    hr.dropdown-divider
+                  li
+                    a.dropdown-item(href="/auth/logout")
+                      i.fas.fa-sign-out-alt.me-1
+                      | Cerrar Sesión
+            else
+              li.nav-item
+                a.nav-link(href="/auth/login")
+                  i.fas.fa-sign-in-alt.me-1
+                  | Iniciar Sesión
+
+    main.container.my-4
+      .row
+        .col-12
+          .d-flex.justify-content-between.align-items-center.mb-4
+            h1.display-6.mb-0= title
+            if breadcrumbs
+              nav(aria-label="breadcrumb")
+                ol.breadcrumb.mb-0
+                  each crumb, index in breadcrumbs
+                    if index === breadcrumbs.length - 1
+                      li.breadcrumb-item.active(aria-current="page")= crumb.name
+                    else
+                      li.breadcrumb-item
+                        a(href=crumb.path)= crumb.name
+
+          if error
+            .alert.alert-danger.alert-dismissible.fade.show(role="alert")
+              i.fas.fa-exclamation-circle.me-2
+              | #{error}
+              button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+
+          if success
+            .alert.alert-success.alert-dismissible.fade.show(role="alert")
+              i.fas.fa-check-circle.me-2
+              | #{success}
+              button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+
+          block content
+
+    footer.bg-dark.text-white.py-4.mt-5
+      .container
+        .row
+          .col-md-4
+            h5 HIS Hospital
+            p Sistema de Gestión Hospitalaria Integral
+          .col-md-4
+            h5 Enlaces Rápidos
+            ul.list-unstyled
+              li
+                a.text-white(href="/") Inicio
+              li
+                a.text-white(href="/admission/list") Admisiones
+              li
+                a.text-white(href="/patient/list") Pacientes
+          .col-md-4
+            h5 Contacto
+            address
+              | Av. Hospital 1234
+              br
+              | Ciudad, País
+              br
+              | Tel: +123 456 7890
+        hr
+        .text-center
+          small © #{new Date().getFullYear()} HIS Hospital - Todos los derechos reservados
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")
+    script(src="/js/main.js")
+    block scripts

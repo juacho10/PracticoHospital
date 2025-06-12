@@ -1,0 +1,44 @@
+extends ../layout
+
+block content
+  .card.shadow
+    .card-header.bg-primary.text-white
+      h3.mb-0
+        i.fas.fa-bed.me-2
+        | Gestión de Camas
+    .card-body
+      .d-flex.justify-content-between.mb-4
+        h5 Administración de camas y habitaciones del hospital
+        a.btn.btn-success(href="/bed/create")
+          i.fas.fa-plus.me-1
+          | Agregar Cama
+
+      if beds && beds.length > 0
+        table.table.table-striped.table-hover
+          thead
+            tr
+              th Departamento
+              th Habitación
+              th Cama
+              th Ala
+              th Estado
+              th Acciones
+          tbody
+            each bed in beds
+              tr
+                td= bed.department
+                td= bed.room_number
+                td= bed.bed_number
+                td= bed.wing
+                td
+                  form.form-inline(method="POST", action="/bed/update-status")
+                    input(type="hidden", name="bedId", value=bed.id)
+                    select.form-select(name="status", onchange="this.form.submit()")
+                      each status in bedStatuses
+                        option(value=status, selected=bed.status === status)= status
+                td
+                  a.btn.btn-sm.btn-danger(href=`/bed/delete/${bed.id}`, onclick="return confirm('¿Está seguro?')")
+                    i.fas.fa-trash.me-1
+                    | Eliminar
+      else
+        .alert.alert-info No hay camas registradas

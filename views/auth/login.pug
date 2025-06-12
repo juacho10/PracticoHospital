@@ -1,14 +1,46 @@
 extends ../layout
 
 block content
-    .login-container
-        h2 Iniciar Sesión
-        form(method="POST", action="/auth/login")
-            .form-group
-                label(for="username") Usuario:
-                input(type="text", id="username", name="username", required)
-            .form-group
-                label(for="password") Contraseña:
-                input(type="password", id="password", name="password", required)
-            button(type="submit") Iniciar Sesión
+  .row.justify-content-center
+    .col-md-6.col-lg-4
+      .card.shadow
+        .card-body.p-4
+          h2.card-title.text-center.mb-4
+            i.fas.fa-sign-in-alt.me-2
+            | Iniciar Sesión
+          
+          form(method="POST", action="/auth/login")
+            .mb-3
+              label.form-label(for="username") Usuario
+              .input-group
+                span.input-group-text
+                  i.fas.fa-user
+                input.form-control(type="text", id="username", name="username", required, autofocus)
+              .invalid-feedback Por favor ingrese su usuario
+            
+            .mb-3
+              label.form-label(for="password") Contraseña
+              .input-group
+                span.input-group-text
+                  i.fas.fa-lock
+                input.form-control(type="password", id="password", name="password", required)
+              .invalid-feedback Por favor ingrese su contraseña
+            
+            .mb-3.form-check
+              input.form-check-input(type="checkbox", id="remember", name="remember")
+              label.form-check-label(for="remember") Recordar mi usuario
+            
+            .d-grid.gap-2
+              button.btn.btn-primary(type="submit")
+                i.fas.fa-sign-in-alt.me-2
+                | Ingresar
+            
+            if error
+              .alert.alert-danger.mt-3.mb-0
+                i.fas.fa-exclamation-circle.me-2
+                | #{error}
+        
+        .card-footer.text-center.bg-transparent
+          small.text-muted ¿Problemas para ingresar? 
+            a(href="#") Contacte al administrador
 

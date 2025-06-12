@@ -1,14 +1,71 @@
 extends layout
 
 block content
-    h2 Bienvenido al Sistema de Admisión Hospitalaria
-    .dashboard
-        if user.role === 'admin' || user.role === 'receptionist'
-            .card
-                h3 Registrar Nuevo Paciente
-                p Admisión de pacientes nuevos o existentes
-                a.button(href="/admission/register") Ir a Registro
-        .card
-            h3 Pacientes Admitidos
-            p Ver lista de pacientes actualmente admitidos
-            a.button(href="/admission/list") Ver Lista
+  .row.mb-4
+    .col-12
+      h2.display-6.mb-4 
+      p.text-muted Bienvenido al sistema de gestión hospitalaria
+
+  .row.g-4
+    if user.role === 'admin' || user.role === 'recepcionista'
+      .col-md-6.col-lg-4
+        .card.h-100.border-primary
+          .card-header.bg-primary.text-white
+            i.fas.fa-user-plus.me-2
+            | Registrar Paciente
+          .card-body
+            p.card-text Admisión de pacientes nuevos o existentes al sistema hospitalario.
+          .card-footer.bg-transparent
+            a.btn.btn-primary(href="/admission/register")
+              i.fas.fa-plus.me-1
+              | Nuevo Registro
+
+    .col-md-6.col-lg-4
+      .card.h-100.border-success
+        .card-header.bg-success.text-white
+          i.fas.fa-procedures.me-2
+          | Pacientes Admitidos
+        .card-body
+          p.card-text Lista de pacientes actualmente en el hospital.
+          if admissionsCount
+            h3.text-success= admissionsCount
+        .card-footer.bg-transparent
+          a.btn.btn-success(href="/admission/list")
+            i.fas.fa-list.me-1
+            | Ver Lista
+
+    .col-md-6.col-lg-4
+      .card.h-100.border-info
+        .card-header.bg-info.text-white
+          i.fas.fa-users.me-2
+          | Todos los Pacientes
+        .card-body
+          p.card-text Base de datos completa de pacientes del hospital.
+          if patientsCount
+            h3.text-info= patientsCount
+        .card-footer.bg-transparent
+          a.btn.btn-info(href="/patient/list")
+            i.fas.fa-search.me-1
+            | Buscar Pacientes
+
+    if user.role === 'admin'
+      .col-md-6.col-lg-4
+        .card.h-100.border-warning
+          .card-header.bg-warning.text-dark
+            i.fas.fa-bed.me-2
+            | Gestión de Camas
+          .card-body
+            p.card-text Administración de camas y habitaciones del hospital.
+          .card-footer.bg-transparent
+            a.btn.btn-warning(href="/bed/list")
+              i.fas.fa-cog.me-1
+              | Administrar
+
+block scripts
+  script.
+    // Ejemplo de gráfico con Chart.js
+    document.addEventListener('DOMContentLoaded', function() {
+      // Podrías implementar gráficos aquí para estadísticas
+      console.log('Dashboard cargado');
+    });
+

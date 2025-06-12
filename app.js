@@ -27,6 +27,9 @@ const authRoutes = require('./routes/authRoutes');
 const admissionRoutes = require('./routes/admissionRoutes');
 const patientRoutes = require('./routes/patientRoutes'); 
 
+const bedRoutes = require('./routes/bedRoutes');
+app.use('/bed', bedRoutes);
+
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 app.use('/admission', admissionRoutes);
@@ -37,3 +40,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+

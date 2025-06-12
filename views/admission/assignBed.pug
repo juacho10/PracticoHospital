@@ -1,18 +1,44 @@
 extends ../layout
 
 block content
-  h2 Asignar Cama al Paciente
-  form(method="POST", action="/admission/assign-bed")
-    input(type="hidden", name="admissionId", value=admissionId)
-    each deptBeds, dept in availableBeds
-      if deptBeds.length > 0
-        h3= dept.charAt(0).toUpperCase() + dept.slice(1)
-        .bed-selection
-          each bed in deptBeds
-            .bed-option
-              input(type="radio", id=`bed-${bed.id}`, name="bedId", value=bed.id, required)
-              label(for=`bed-${bed.id}`)
-                | Ala #{bed.wing}, Habitación #{bed.room_number}, Cama #{bed.bed_number}
-    button(type="submit") Asignar Cama
+  .card.shadow
+    .card-header.bg-primary.text-white
+      h3.mb-0
+        i.fas.fa-bed.me-2
+        | Asignar Cama al Paciente
+    
+    .card-body
+      form(method="POST", action="/admission/assign-bed")
+        input(type="hidden", name="admissionId", value=admissionId)
+        
+        .mb-4
+          h5 Seleccione un departamento y una cama disponible:
+          each deptBeds, dept in availableBeds
+            if deptBeds.length > 0
+              .card.mb-3
+                .card-header.bg-light
+                  h6.mb-0= dept.charAt(0).toUpperCase() + dept.slice(1)
+                .card-body
+                  .row.g-3
+                    each bed in deptBeds
+                      .col-md-6
+                        .form-check
+                          input.form-check-input(
+                            type="radio", 
+                            id=`bed-${bed.id}`, 
+                            name="bedId", 
+                            value=bed.id, 
+                            required
+                          )
+                          label.form-check-label(for=`bed-${bed.id}`)
+                            | Ala #{bed.wing}, Habitación #{bed.room_number}, Cama #{bed.bed_number}
+        
+        .d-grid.gap-2.d-md-flex.justify-content-md-end
+          a.btn.btn-secondary.me-md-2(href="/admission/list")
+            i.fas.fa-arrow-left.me-1
+            | Cancelar
+          button.btn.btn-primary(type="submit")
+            i.fas.fa-bed.me-1
+            | Asignar Cama Seleccionada
 
 

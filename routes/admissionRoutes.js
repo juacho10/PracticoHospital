@@ -11,3 +11,6 @@ router.get('/list', ensureAuthenticated, admissionController.listAdmissions);
 router.post('/discharge/:id', ensureAuthenticated, admissionController.dischargePatient);
 
 module.exports = router;
+
+
+
