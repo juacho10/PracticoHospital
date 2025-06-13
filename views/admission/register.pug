@@ -8,6 +8,11 @@ block content
         | Registrar Paciente para Admisión
     
     .card-body
+      if errors && errors.general
+        .alert.alert-danger
+          i.fas.fa-exclamation-circle.me-2
+          | #{errors.general}
+      
       form(method="POST", action="/admission/register", id="admissionForm")
         .row.mb-4
           .col-md-6
@@ -29,32 +34,75 @@ block content
         .row.g-3
           .col-md-6
             .form-floating
-              input.form-control(type="text", id="dni", name="dni", required, value=formData ? formData.dni : '')
+              input.form-control(
+                type="text", 
+                id="dni", 
+                name="dni", 
+                required,
+                value=formData ? formData.dni : '',
+                class=errors && errors.dni ? 'is-invalid' : ''
+              )
               label(for="dni") DNI *
+              if errors && errors.dni
+                .invalid-feedback #{errors.dni}
           
           .col-md-6
             .form-floating
-              input.form-control(type="text", id="first_name", name="first_name", required, value=formData ? formData.first_name : '')
+              input.form-control(
+                type="text", 
+                id="first_name", 
+                name="first_name", 
+                required,
+                value=formData ? formData.first_name : '',
+                class=errors && errors.first_name ? 'is-invalid' : ''
+              )
               label(for="first_name") Nombre *
+              if errors && errors.first_name
+                .invalid-feedback #{errors.first_name}
           
           .col-md-6
             .form-floating
-              input.form-control(type="text", id="last_name", name="last_name", required, value=formData ? formData.last_name : '')
+              input.form-control(
+                type="text", 
+                id="last_name", 
+                name="last_name", 
+                required,
+                value=formData ? formData.last_name : '',
+                class=errors && errors.last_name ? 'is-invalid' : ''
+              )
               label(for="last_name") Apellido *
+              if errors && errors.last_name
+                .invalid-feedback #{errors.last_name}
           
           .col-md-3
             .form-floating
-              input.form-control(type="date", id="birth_date", name="birth_date", required, value=formData ? formData.birth_date : '')
+              input.form-control(
+                type="date", 
+                id="birth_date", 
+                name="birth_date", 
+                required,
+                value=formData ? formData.birth_date : '',
+                class=errors && errors.birth_date ? 'is-invalid' : ''
+              )
               label(for="birth_date") Fecha Nacimiento *
+              if errors && errors.birth_date
+                .invalid-feedback #{errors.birth_date}
           
           .col-md-3
             .form-floating
-              select.form-select(id="gender", name="gender", required)
+              select.form-select(
+                id="gender", 
+                name="gender", 
+                required,
+                class=errors && errors.gender ? 'is-invalid' : ''
+              )
                 option(value="") Seleccione...
-                option(value="M", selected=formData && formData.gender === 'M') Masculino
-                option(value="F", selected=formData && formData.gender === 'F') Femenino
-                option(value="O", selected=formData && formData.gender === 'O') Otro
+                option(value="M", selected=(formData && formData.gender === 'M')) Masculino
+                option(value="F", selected=(formData && formData.gender === 'F')) Femenino
+                option(value="O", selected=(formData && formData.gender === 'O')) Otro
               label(for="gender") Género *
+              if errors && errors.gender
+                .invalid-feedback #{errors.gender}
         
         hr.my-4
         
@@ -65,31 +113,46 @@ block content
         .row.g-3
           .col-md-8
             .form-floating
-              input.form-control(type="text", id="address", name="address", value=formData ? formData.address : '')
+              input.form-control(
+                type="text", 
+                id="address", 
+                name="address", 
+                value=formData ? formData.address : ''
+              )
               label(for="address") Dirección
           
           .col-md-4
             .form-floating
-              input.form-control(type="text", id="phone", name="phone", value=formData ? formData.phone : '')
+              input.form-control(
+                type="text", 
+                id="phone", 
+                name="phone", 
+                value=formData ? formData.phone : ''
+              )
               label(for="phone") Teléfono
           
           .col-md-6
             .form-floating
-              input.form-control(type="email", id="email", name="email", value=formData ? formData.email : '')
+              input.form-control(
+                type="email", 
+                id="email", 
+                name="email", 
+                value=formData ? formData.email : ''
+              )
               label(for="email") Email
           
           .col-md-6
             .form-floating
-    select.form-select(id="insurance", name="insurance")
-      option(value="") Seleccione seguro...
-      option(value="OSDE") OSDE
-      option(value="Swiss Medical") Swiss Medical
-      option(value="Galeno") Galeno
-      option(value="Medifé") Medifé
-      option(value="Omint") DOSEP 
-      option(value="Particular") Particular
-      option(value="Otro") Otro
-    label(for="insurance") Seguro Médico
+              select.form-select(id="insurance", name="insurance")
+                option(value="") Seleccione seguro...
+                option(value="OSDE", selected=(formData && formData.insurance === 'OSDE')) OSDE
+                option(value="Swiss Medical", selected=(formData && formData.insurance === 'Swiss Medical')) Swiss Medical
+                option(value="Galeno", selected=(formData && formData.insurance === 'Galeno')) Galeno
+                option(value="Medifé", selected=(formData && formData.insurance === 'Medifé')) Medifé
+                option(value="DOSEP", selected=(formData && formData.insurance === 'DOSEP')) DOSEP
+                option(value="Particular", selected=(formData && formData.insurance === 'Particular')) Particular
+                option(value="Otro", selected=(formData && formData.insurance === 'Otro')) Otro
+              label(for="insurance") Seguro Médico
         
         hr.my-4
         
@@ -100,24 +163,47 @@ block content
         .row.g-3
           .col-md-4
             .form-floating
-              select.form-select(id="admission_type", name="admission_type", required)
+              select.form-select(
+                id="admission_type", 
+                name="admission_type", 
+                required,
+                class=errors && errors.admission_type ? 'is-invalid' : ''
+              )
                 option(value="") Seleccione tipo...
                 each type in admissionTypes
-                  option(value=type, selected=formData && formData.admission_type === type)= type.charAt(0).toUpperCase() + type.slice(1)
+                  option(
+                    value=type, 
+                    selected=(formData && formData.admission_type === type)
+                  )= type.charAt(0).toUpperCase() + type.slice(1)
               label(for="admission_type") Tipo de Admisión *
+              if errors && errors.admission_type
+                .invalid-feedback #{errors.admission_type}
           
           .col-md-8
             .form-floating
-              input.form-control(type="text", id="referring_doctor", name="referring_doctor", value=formData ? formData.referring_doctor : '')
+              input.form-control(
+                type="text", 
+                id="referring_doctor", 
+                name="referring_doctor", 
+                value=formData ? formData.referring_doctor : ''
+              )
               label(for="referring_doctor") Médico Referente
         
           .col-12
             .form-floating
-              textarea.form-control(id="reason", name="reason", style="height: 100px", required)= formData ? formData.reason : ''
+              textarea.form-control(
+                id="reason", 
+                name="reason", 
+                style="height: 100px", 
+                required,
+                class=errors && errors.reason ? 'is-invalid' : ''
+              )= formData ? formData.reason : ''
               label(for="reason") Motivo de Admisión *
+              if errors && errors.reason
+                .invalid-feedback #{errors.reason}
         
         .d-grid.gap-2.d-md-flex.justify-content-md-end.mt-4
-          button.btn.btn-secondary.me-md-2(type="button", onclick="history.back()")
+          a.btn.btn-secondary.me-md-2(href="/admission/list")
             i.fas.fa-arrow-left.me-1
             | Cancelar
           button.btn.btn-primary(type="submit")
@@ -127,119 +213,107 @@ block content
 block scripts
   script.
     document.addEventListener('DOMContentLoaded', function() {
-      // Toggle búsqueda de paciente
+      // Elementos del DOM
       const searchPatientBtn = document.getElementById('searchPatientBtn');
       const patientSearchContainer = document.getElementById('patientSearchContainer');
-      
-      searchPatientBtn.addEventListener('click', function() {
-        patientSearchContainer.classList.toggle('d-none');
-      });
-      
-      // Búsqueda de paciente existente
       const patientSearchBtn = document.getElementById('patientSearchBtn');
       const patientSearchInput = document.getElementById('patientSearchInput');
       const patientSearchResults = document.getElementById('patientSearchResults');
-      
+      const admissionForm = document.getElementById('admissionForm');
+
+      // Función para mostrar mensajes
+      function showMessage(message, type = 'info') {
+        const alertTypes = {
+          'success': { class: 'alert-success', icon: 'check-circle' },
+          'danger': { class: 'alert-danger', icon: 'times-circle' },
+          'warning': { class: 'alert-warning', icon: 'exclamation-triangle' },
+          'info': { class: 'alert-info', icon: 'info-circle' }
+        };
+        
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert ${alertTypes[type].class} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+          <i class="fas fa-${alertTypes[type].icon} me-2"></i>
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        patientSearchResults.innerHTML = '';
+        patientSearchResults.appendChild(alertDiv);
+        
+        setTimeout(() => {
+          alertDiv.classList.remove('show');
+          setTimeout(() => alertDiv.remove(), 150);
+        }, 5000);
+      }
+
+      // Función para autocompletar formulario
+      function autocompleteForm(patient) {
+        const fields = {
+          'dni': patient.dni || '',
+          'first_name': patient.first_name || '',
+          'last_name': patient.last_name || '',
+          'birth_date': patient.birth_date ? patient.birth_date.split('T')[0] : '',
+          'gender': patient.gender || 'M',
+          'address': patient.address || '',
+          'phone': patient.phone || '',
+          'email': patient.email || '',
+          'insurance': patient.insurance || ''
+        };
+
+        for (const [id, value] of Object.entries(fields)) {
+          const field = document.getElementById(id);
+          if (field) {
+            field.value = value;
+            field.dispatchEvent(new Event('change'));
+          }
+        }
+      }
+
+      // Búsqueda de paciente
       patientSearchBtn.addEventListener('click', async function() {
         const dni = patientSearchInput.value.trim();
         
         if (!dni) {
-          patientSearchResults.innerHTML = `
-            <div class="alert alert-warning">
-              <i class="fas fa-exclamation-triangle me-2"></i>
-              Por favor ingrese un DNI para buscar
-            </div>
-          `;
+          showMessage('Por favor ingrese un DNI para buscar', 'warning');
           return;
         }
-        
+
         try {
-          const response = await fetch(`/api/patients/search?dni=${dni}`);
+          showMessage('<div class="spinner-border spinner-border-sm me-2"></div> Buscando paciente...', 'info');
+          
+          const response = await fetch(`/patient/api/search?dni=${dni}`);
+          
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Error en la búsqueda');
+          }
+
           const data = await response.json();
           
-          if (data.error) {
-            patientSearchResults.innerHTML = `
-              <div class="alert alert-danger">
-                <i class="fas fa-times-circle me-2"></i>
-                ${data.error}
-              </div>
-            `;
-          } else if (data.patient) {
-            // Autocompletar formulario con datos del paciente encontrado
-            document.getElementById('dni').value = data.patient.dni;
-            document.getElementById('first_name').value = data.patient.first_name;
-            document.getElementById('last_name').value = data.patient.last_name;
-            document.getElementById('birth_date').value = data.patient.birth_date.split('T')[0];
-            document.getElementById('gender').value = data.patient.gender;
-            document.getElementById('address').value = data.patient.address || '';
-            document.getElementById('phone').value = data.patient.phone || '';
-            document.getElementById('email').value = data.patient.email || '';
-            document.getElementById('insurance').value = data.patient.insurance || '';
-            
-            patientSearchResults.innerHTML = `
-              <div class="alert alert-success">
-                <i class="fas fa-check-circle me-2"></i>
-                Paciente encontrado: <strong>${data.patient.last_name}, ${data.patient.first_name}</strong>
-                <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            `;
+          if (data.patient) {
+            autocompleteForm(data.patient);
+            showMessage(`Paciente encontrado: ${data.patient.last_name}, ${data.patient.first_name}`, 'success');
           } else {
-            patientSearchResults.innerHTML = `
-              <div class="alert alert-info">
-                <i class="fas fa-info-circle me-2"></i>
-                No se encontró un paciente con ese DNI. Complete los datos manualmente.
-              </div>
-            `;
+            showMessage('No se encontró paciente con ese DNI', 'info');
           }
         } catch (error) {
-          console.error('Error al buscar paciente:', error);
-          patientSearchResults.innerHTML = `
-            <div class="alert alert-danger">
-              <i class="fas fa-times-circle me-2"></i>
-              Error al buscar paciente. Intente nuevamente.
-            </div>
-          `;
+          console.error('Error:', error);
+          showMessage(error.message || 'Error al buscar paciente', 'danger');
         }
       });
-      
-      // Validación de formulario
-      const admissionForm = document.getElementById('admissionForm');
-      
-      admissionForm.addEventListener('submit', function(e) {
-        let isValid = true;
-        const requiredFields = admissionForm.querySelectorAll('[required]');
-        
-        requiredFields.forEach(field => {
-          if (!field.value.trim()) {
-            field.classList.add('is-invalid');
-            isValid = false;
-          } else {
-            field.classList.remove('is-invalid');
+
+      // Mostrar/ocultar campo de búsqueda
+      searchPatientBtn.addEventListener('click', function() {
+        patientSearchContainer.classList.toggle('d-none');
+      });
+
+      // Validación en tiempo real
+      admissionForm.querySelectorAll('[required]').forEach(field => {
+        field.addEventListener('input', function() {
+          if (this.value.trim()) {
+            this.classList.remove('is-invalid');
           }
         });
-        
-        if (!isValid) {
-          e.preventDefault();
-          
-          const firstInvalidField = admissionForm.querySelector('.is-invalid');
-          if (firstInvalidField) {
-            firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            firstInvalidField.focus();
-          }
-          
-          // Mostrar alerta general
-          const existingAlert = admissionForm.querySelector('.alert.alert-danger');
-          if (!existingAlert) {
-            const alert = document.createElement('div');
-            alert.className = 'alert alert-danger mt-3';
-            alert.innerHTML = `
-              <i class="fas fa-exclamation-triangle me-2"></i>
-              Por favor complete todos los campos obligatorios marcados con *
-            `;
-            admissionForm.prepend(alert);
-            
-            setTimeout(() => alert.remove(), 5000);
-          }
-        }
       });
     });
