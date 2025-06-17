@@ -18,26 +18,36 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+    }
 }));
 
 // Rutas
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/authRoutes');
 const admissionRoutes = require('./routes/admissionRoutes');
-const patientRoutes = require('./routes/patientRoutes'); 
-
+const patientRoutes = require('./routes/patientRoutes');
 const bedRoutes = require('./routes/bedRoutes');
-app.use('/bed', bedRoutes);
 
+app.use('/bed', bedRoutes);
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 app.use('/admission', admissionRoutes);
-app.use('/patient', patientRoutes); 
+app.use('/patient', patientRoutes);
+
+// Manejo de errores
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).render('error', { 
+        title: 'Error', 
+        message: 'Ocurrió un error en el servidor' 
+    });
+});
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
-

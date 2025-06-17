@@ -1,0 +1,33 @@
+databases:
+  - name: his_hospital
+    databaseName: his_hospital
+    user: his_admin
+    plan: free
+
+services:
+  - type: web
+    name: his-hospital-web
+    runtime: node
+    buildCommand: "./render-build.sh"
+    startCommand: "npm start"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DB_HOST
+        fromDatabase:
+          name: his_hospital
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: his_hospital
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: his_hospital
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: his_hospital
+          property: database
