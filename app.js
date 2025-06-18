@@ -6,6 +6,10 @@ require('dotenv').config();
 
 const app = express();
 
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1); // Para cookies seguras en producción
+}
+
 // Configuración
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
