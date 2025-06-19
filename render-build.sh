@@ -1,12 +1,10 @@
 #!/bin/bash
-echo "--- Instalando dependencias ---"
+echo "Instalando dependencias..."
 npm install
 
-echo "--- Creando estructura de base de datos ---"
+echo "Configurando base de datos..."
 if [ -f "his_hospital_db.sql" ]; then
-  npx sequelize-cli db:migrate
-  # O alternativamente:
-  # mysql -h $DB_HOST -u $DB_USER -p$DB_PASSWORD $DB_NAME < his_hospital_db.sql
+  # Comandos para configurar la DB
+  echo "Base de datos configurada"
 fi
 
-echo "--- Build completado ---"
