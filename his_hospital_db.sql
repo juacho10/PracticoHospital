@@ -1,3 +1,4 @@
+-- Active: 1750717086474@@dpg-d1csl1re5dus73a9bbbg-a.oregon-postgres.render.com@5432@postgres
 -- his_hospital_db.sql
 CREATE DATABASE IF NOT EXISTS his_hospital;
 USE his_hospital;
