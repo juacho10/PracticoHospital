@@ -2,23 +2,14 @@ const pool = require('../config/database');
 const bcrypt = require('bcryptjs');
 
 class User {
-  static async findByUsername(username) {
-    try {
-      const { rows } = await pool.query(
-        'SELECT * FROM users WHERE username = $1 LIMIT 1', 
-        [username]
-      );
-      return rows[0];
-    } catch (error) {
-      console.error('Error al buscar usuario:', error);
-      throw error;
+    static async findByUsername(username) {
+        const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        return rows[0];
     }
-  }
 
-  static async comparePassword(candidatePassword, hashedPassword) {
-    const bcrypt = require('bcryptjs');
-    return bcrypt.compare(candidatePassword, hashedPassword);
-  }
+    static async comparePassword(candidatePassword, hashedPassword) {
+        return await bcrypt.compare(candidatePassword, hashedPassword);
+    }
 
     static async getAll() {
         const [rows] = await pool.query('SELECT id, username, full_name, role, created_at FROM users ORDER BY full_name');
