@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
 require('dotenv').config();
 
 const app = express();
@@ -15,13 +16,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { 
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
-    }
+  store: new pgSession({
+    conString: process.env.DATABASE_URL,
+    tableName: 'session'
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 24 * 60 * 60 * 1000 // 1 día
+  }
 }));
 
 // Rutas
@@ -39,15 +45,15 @@ app.use('/patient', patientRoutes);
 
 // Manejo de errores
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).render('error', { 
-        title: 'Error', 
-        message: 'Ocurrió un error en el servidor' 
-    });
+  console.error(err.stack);
+  res.status(500).render('error', { 
+    title: 'Error', 
+    message: 'Ocurrió un error en el servidor' 
+  });
 });
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
