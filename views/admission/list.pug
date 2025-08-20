@@ -1,29 +1,48 @@
 extends ../layout
+
 block content
-  h2.text-center 🏥 Pacientes Admitidos
-  table
-    thead
-      tr
-        th DNI
-        th Paciente
-        th Fecha Admisión
-        th Tipo
-        th Habitación/Cama
-        th Departamento
-        th Acciones
-    tbody
-      each admission in admissions
-        tr
-          td= admission.dni
-          td= `${admission.last_name}, ${admission.first_name}`
-          td= new Date(admission.admission_date).toLocaleString()
-          td= admission.admission_type
-          td= admission.room_number ? `${admission.room_number}/${admission.bed_number}` : 'Sin asignar'
-          td= admission.department ? admission.department : 'N/A'
-          td
-            form.inline-form(method="POST", action=`/admission/discharge/${admission.id}`)
-              button.button.button-success(type="submit") Alta
-  .text-center
-    a.button(href="/admission/register") ➕ Nuevo Paciente
-    | 
-    a.button(href="/") ↩️ Volver al Inicio
+  .card.shadow
+    .card-header.bg-primary.text-white
+      h3.mb-0
+        i.fas.fa-procedures.me-2
+        | 🏥 Pacientes Admitidos
+    
+    .card-body
+      if admissions && admissions.length > 0
+        .table-responsive
+          table.table.table-striped.table-hover
+            thead
+              tr
+                th DNI
+                th Paciente
+                th Fecha Admisión
+                th Tipo
+                th Habitación/Cama
+                th Departamento
+                th Estado
+                th Acciones
+            tbody
+              each admission in admissions
+                tr
+                  td= admission.dni
+                  td= `${admission.last_name}, ${admission.first_name}`
+                  td= new Date(admission.admission_date).toLocaleString()
+                  td= admission.admission_type.charAt(0).toUpperCase() + admission.admission_type.slice(1)
+                  td= admission.room_number ? `${admission.room_number}/${admission.bed_number}` : 'Sin asignar'
+                  td= admission.department ? admission.department.charAt(0).toUpperCase() + admission.department.slice(1) : 'N/A'
+                  td
+                    span.badge(class=admission.status === 'activa' ? 'bg-success' : 'bg-secondary')
+                      = admission.status.charAt(0).toUpperCase() + admission.status.slice(1)
+                  td
+                    if admission.status === 'activa'
+                     form.d-inline(method="POST", action=`/admission/discharge/${admission.id}`)
+                     button.btn.btn-sm.btn-success(type="submit", onclick="return confirm('¿Confirmar el alta del paciente?')")
+                     i.fas.fa-sign-out-alt.me-1
+                    | Dar de Alta
+      else
+        .alert.alert-info No hay pacientes admitidos actualmente
+      
+      .d-grid.gap-2.d-md-flex.justify-content-md-end.mt-4
+        a.btn.btn-primary(href="/admission/register")
+          i.fas.fa-plus.me-1
+          | Nueva Admisión

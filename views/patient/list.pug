@@ -1,31 +1,52 @@
 extends ../layout
 
 block content
-  h2.text-center 👥 Lista de Pacientes
-  
-  if patients && patients.length > 0
-    table.table.table-striped.table-hover
-      thead
-        tr
-          th DNI
-          th Nombre
-          th Apellido
-          th Fecha Nacimiento
-          th Género
-          th Acciones
-      tbody
-        each patient in patients
-          tr
-            td= patient.dni
-            td= patient.first_name
-            td= patient.last_name
-            td= new Date(patient.birth_date).toLocaleDateString()
-            td= patient.gender === 'M' ? 'Masculino' : patient.gender === 'F' ? 'Femenino' : 'Otro'
-            td
-              a.btn.btn-sm.btn-primary(href=`/patient/edit/${patient.id}`) Editar
-              |  
-              a.btn.btn-sm.btn-danger(href=`/patient/delete/${patient.id}`, onclick="return confirm('¿Está seguro?')") Eliminar
-  else
-    .alert.alert-info No hay pacientes registrados
-  
-  a.btn.btn-success(href="/admission/register") Nuevo Paciente
+  .card.shadow
+    .card-header.bg-primary.text-white
+      h3.mb-0
+        i.fas.fa-users.me-2
+        | 👥 Lista de Pacientes
+    
+    .card-body
+      if patients && patients.length > 0
+        .table-responsive
+          table.table.table-striped.table-hover
+            thead
+              tr
+                th DNI
+                th Nombre
+                th Apellido
+                th Fecha Nacimiento
+                th Género
+                th Admisiones
+                th Acciones
+            tbody
+              each patient in patients
+                tr
+                  td= patient.dni
+                  td= patient.first_name
+                  td= patient.last_name
+                  td= new Date(patient.birth_date).toLocaleDateString()
+                  td= patient.gender === 'M' ? 'Masculino' : patient.gender === 'F' ? 'Femenino' : 'Otro'
+                  td
+                    a.btn.btn-sm.btn-info(href=`/admission/register?dni=${patient.dni}`)
+                      i.fas.fa-procedures.me-1
+                      | Nueva Admisión
+                  td
+                    .btn-group
+                      a.btn.btn-sm.btn-primary.me-2(href=`/patient/edit/${patient.id}`)
+                        i.fas.fa-edit.me-1
+                        | Editar
+                      a.btn.btn-sm.btn-danger(
+                        href=`/patient/delete/${patient.id}`,
+                        onclick="return confirm('¿Está seguro que desea eliminar este paciente?')"
+                      )
+                        i.fas.fa-trash.me-1
+                        | Eliminar
+      else
+        .alert.alert-info No hay pacientes registrados
+      
+      .d-grid.gap-2.d-md-flex.justify-content-md-end.mt-4
+        a.btn.btn-success(href="/admission/register")
+          i.fas.fa-plus.me-1
+          | Nuevo Paciente

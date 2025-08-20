@@ -35,9 +35,9 @@ block content
           .col-md-6
             .form-floating
               input.form-control(
-                type="text", 
-                id="dni", 
-                name="dni", 
+                type="text",
+                id="dni",
+                name="dni",
                 required,
                 value=formData ? formData.dni : '',
                 class=errors && errors.dni ? 'is-invalid' : ''
@@ -49,9 +49,9 @@ block content
           .col-md-6
             .form-floating
               input.form-control(
-                type="text", 
-                id="first_name", 
-                name="first_name", 
+                type="text",
+                id="first_name",
+                name="first_name",
                 required,
                 value=formData ? formData.first_name : '',
                 class=errors && errors.first_name ? 'is-invalid' : ''
@@ -63,9 +63,9 @@ block content
           .col-md-6
             .form-floating
               input.form-control(
-                type="text", 
-                id="last_name", 
-                name="last_name", 
+                type="text",
+                id="last_name",
+                name="last_name",
                 required,
                 value=formData ? formData.last_name : '',
                 class=errors && errors.last_name ? 'is-invalid' : ''
@@ -77,9 +77,9 @@ block content
           .col-md-3
             .form-floating
               input.form-control(
-                type="date", 
-                id="birth_date", 
-                name="birth_date", 
+                type="date",
+                id="birth_date",
+                name="birth_date",
                 required,
                 value=formData ? formData.birth_date : '',
                 class=errors && errors.birth_date ? 'is-invalid' : ''
@@ -91,8 +91,8 @@ block content
           .col-md-3
             .form-floating
               select.form-select(
-                id="gender", 
-                name="gender", 
+                id="gender",
+                name="gender",
                 required,
                 class=errors && errors.gender ? 'is-invalid' : ''
               )
@@ -114,9 +114,9 @@ block content
           .col-md-8
             .form-floating
               input.form-control(
-                type="text", 
-                id="address", 
-                name="address", 
+                type="text",
+                id="address",
+                name="address",
                 value=formData ? formData.address : ''
               )
               label(for="address") Dirección
@@ -124,9 +124,9 @@ block content
           .col-md-4
             .form-floating
               input.form-control(
-                type="text", 
-                id="phone", 
-                name="phone", 
+                type="text",
+                id="phone",
+                name="phone",
                 value=formData ? formData.phone : ''
               )
               label(for="phone") Teléfono
@@ -134,9 +134,9 @@ block content
           .col-md-6
             .form-floating
               input.form-control(
-                type="email", 
-                id="email", 
-                name="email", 
+                type="email",
+                id="email",
+                name="email",
                 value=formData ? formData.email : ''
               )
               label(for="email") Email
@@ -164,15 +164,15 @@ block content
           .col-md-4
             .form-floating
               select.form-select(
-                id="admission_type", 
-                name="admission_type", 
+                id="admission_type",
+                name="admission_type",
                 required,
                 class=errors && errors.admission_type ? 'is-invalid' : ''
               )
                 option(value="") Seleccione tipo...
                 each type in admissionTypes
                   option(
-                    value=type, 
+                    value=type,
                     selected=(formData && formData.admission_type === type)
                   )= type.charAt(0).toUpperCase() + type.slice(1)
               label(for="admission_type") Tipo de Admisión *
@@ -182,19 +182,19 @@ block content
           .col-md-8
             .form-floating
               input.form-control(
-                type="text", 
-                id="referring_doctor", 
-                name="referring_doctor", 
+                type="text",
+                id="referring_doctor",
+                name="referring_doctor",
                 value=formData ? formData.referring_doctor : ''
               )
               label(for="referring_doctor") Médico Referente
-        
+          
           .col-12
             .form-floating
               textarea.form-control(
-                id="reason", 
-                name="reason", 
-                style="height: 100px", 
+                id="reason",
+                name="reason",
+                style="height: 100px",
                 required,
                 class=errors && errors.reason ? 'is-invalid' : ''
               )= formData ? formData.reason : ''
@@ -211,109 +211,4 @@ block content
             | Registrar Paciente
 
 block scripts
-  script.
-    document.addEventListener('DOMContentLoaded', function() {
-      // Elementos del DOM
-      const searchPatientBtn = document.getElementById('searchPatientBtn');
-      const patientSearchContainer = document.getElementById('patientSearchContainer');
-      const patientSearchBtn = document.getElementById('patientSearchBtn');
-      const patientSearchInput = document.getElementById('patientSearchInput');
-      const patientSearchResults = document.getElementById('patientSearchResults');
-      const admissionForm = document.getElementById('admissionForm');
-
-      // Función para mostrar mensajes
-      function showMessage(message, type = 'info') {
-        const alertTypes = {
-          'success': { class: 'alert-success', icon: 'check-circle' },
-          'danger': { class: 'alert-danger', icon: 'times-circle' },
-          'warning': { class: 'alert-warning', icon: 'exclamation-triangle' },
-          'info': { class: 'alert-info', icon: 'info-circle' }
-        };
-        
-        const alertDiv = document.createElement('div');
-        alertDiv.className = `alert ${alertTypes[type].class} alert-dismissible fade show`;
-        alertDiv.innerHTML = `
-          <i class="fas fa-${alertTypes[type].icon} me-2"></i>
-          ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        `;
-        
-        patientSearchResults.innerHTML = '';
-        patientSearchResults.appendChild(alertDiv);
-        
-        setTimeout(() => {
-          alertDiv.classList.remove('show');
-          setTimeout(() => alertDiv.remove(), 150);
-        }, 5000);
-      }
-
-      // Función para autocompletar formulario
-      function autocompleteForm(patient) {
-        const fields = {
-          'dni': patient.dni || '',
-          'first_name': patient.first_name || '',
-          'last_name': patient.last_name || '',
-          'birth_date': patient.birth_date ? patient.birth_date.split('T')[0] : '',
-          'gender': patient.gender || 'M',
-          'address': patient.address || '',
-          'phone': patient.phone || '',
-          'email': patient.email || '',
-          'insurance': patient.insurance || ''
-        };
-
-        for (const [id, value] of Object.entries(fields)) {
-          const field = document.getElementById(id);
-          if (field) {
-            field.value = value;
-            field.dispatchEvent(new Event('change'));
-          }
-        }
-      }
-
-      // Búsqueda de paciente
-      patientSearchBtn.addEventListener('click', async function() {
-        const dni = patientSearchInput.value.trim();
-        
-        if (!dni) {
-          showMessage('Por favor ingrese un DNI para buscar', 'warning');
-          return;
-        }
-
-        try {
-          showMessage('<div class="spinner-border spinner-border-sm me-2"></div> Buscando paciente...', 'info');
-          
-          const response = await fetch(`/patient/api/search?dni=${dni}`);
-          
-          if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error || 'Error en la búsqueda');
-          }
-
-          const data = await response.json();
-          
-          if (data.patient) {
-            autocompleteForm(data.patient);
-            showMessage(`Paciente encontrado: ${data.patient.last_name}, ${data.patient.first_name}`, 'success');
-          } else {
-            showMessage('No se encontró paciente con ese DNI', 'info');
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          showMessage(error.message || 'Error al buscar paciente', 'danger');
-        }
-      });
-
-      // Mostrar/ocultar campo de búsqueda
-      searchPatientBtn.addEventListener('click', function() {
-        patientSearchContainer.classList.toggle('d-none');
-      });
-
-      // Validación en tiempo real
-      admissionForm.querySelectorAll('[required]').forEach(field => {
-        field.addEventListener('input', function() {
-          if (this.value.trim()) {
-            this.classList.remove('is-invalid');
-          }
-        });
-      });
-    });
+  script(src="/js/admissionForm.js")

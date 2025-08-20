@@ -1,47 +1,118 @@
 extends ../layout
 
 block content
-    h2.text-center ✏️ Editar Paciente
+  .card.shadow
+    .card-header.bg-primary.text-white
+      h3.mb-0
+        i.fas.fa-edit.me-2
+        | ✏️ Editar Paciente
     
-    form(method="POST", action=`/patient/update/${patient.id}`)
-        .form-row
-            .form-group
-                label(for="dni") DNI:
-                input(type="text", id="dni", name="dni", required, value=patient.dni)
-            .form-group
-                label(for="first_name") Nombre:
-                input(type="text", id="first_name", name="first_name", required, value=patient.first_name)
-            .form-group
-                label(for="last_name") Apellido:
-                input(type="text", id="last_name", name="last_name", required, value=patient.last_name)
+    .card-body
+      form(method="POST", action=`/patient/update/${patient.id}`)
+        .row.g-3
+          .col-md-6
+            .form-floating
+              input.form-control(
+                type="text",
+                id="dni",
+                name="dni",
+                required,
+                value=patient.dni
+              )
+              label(for="dni") DNI *
+          
+          .col-md-6
+            .form-floating
+              input.form-control(
+                type="text",
+                id="first_name",
+                name="first_name",
+                required,
+                value=patient.first_name
+              )
+              label(for="first_name") Nombre *
+          
+          .col-md-6
+            .form-floating
+              input.form-control(
+                type="text",
+                id="last_name",
+                name="last_name",
+                required,
+                value=patient.last_name
+              )
+              label(for="last_name") Apellido *
+          
+          .col-md-3
+            .form-floating
+              input.form-control(
+                type="date",
+                id="birth_date",
+                name="birth_date",
+                required,
+                value=new Date(patient.birth_date).toISOString().split('T')[0]
+              )
+              label(for="birth_date") Fecha Nacimiento *
+          
+          .col-md-3
+            .form-floating
+              select.form-select(id="gender", name="gender", required)
+                option(value="M", selected=patient.gender === 'M') Masculino
+                option(value="F", selected=patient.gender === 'F') Femenino
+                option(value="O", selected=patient.gender === 'O') Otro
+              label(for="gender") Género *
         
-        .form-row
-            .form-group
-                label(for="birth_date") Fecha de Nacimiento:
-                input(type="date", id="birth_date", name="birth_date", required, value=new Date(patient.birth_date).toISOString().split('T')[0])
-            .form-group
-                label(for="gender") Género:
-                select(id="gender", name="gender", required)
-                    option(value="M", selected=patient.gender === 'M') Masculino
-                    option(value="F", selected=patient.gender === 'F') Femenino
-                    option(value="O", selected=patient.gender === 'O') Otro
+        hr.my-4
         
-        .form-group
-            label(for="address") Dirección:
-            input(type="text", id="address", name="address", value=patient.address)
+        h5.mb-3
+          i.fas.fa-address-card.me-2
+          | Información de Contacto
         
-        .form-row
-            .form-group
-                label(for="phone") Teléfono:
-                input(type="text", id="phone", name="phone", value=patient.phone)
-            .form-group
-                label(for="email") Email:
-                input(type="email", id="email", name="email", value=patient.email)
+        .row.g-3
+          .col-md-8
+            .form-floating
+              input.form-control(
+                type="text",
+                id="address",
+                name="address",
+                value=patient.address || ''
+              )
+              label(for="address") Dirección
+          
+          .col-md-4
+            .form-floating
+              input.form-control(
+                type="text",
+                id="phone",
+                name="phone",
+                value=patient.phone || ''
+              )
+              label(for="phone") Teléfono
+          
+          .col-md-6
+            .form-floating
+              input.form-control(
+                type="email",
+                id="email",
+                name="email",
+                value=patient.email || ''
+              )
+              label(for="email") Email
+          
+          .col-md-6
+            .form-floating
+              input.form-control(
+                type="text",
+                id="insurance",
+                name="insurance",
+                value=patient.insurance || ''
+              )
+              label(for="insurance") Seguro Médico
         
-        .form-group
-            label(for="insurance") Seguro Médico:
-            input(type="text", id="insurance", name="insurance", value=patient.insurance)
-        
-        .form-actions
-            button(type="submit") Guardar Cambios
-            a.button.button-secondary(href="/patient/list") Cancelar
+        .d-grid.gap-2.d-md-flex.justify-content-md-end.mt-4
+          a.btn.btn-secondary.me-md-2(href="/patient/list")
+            i.fas.fa-arrow-left.me-1
+            | Cancelar
+          button.btn.btn-primary(type="submit")
+            i.fas.fa-save.me-1
+            | Guardar Cambios

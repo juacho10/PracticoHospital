@@ -8,30 +8,44 @@ block content
         | Asignar Cama al Paciente
     
     .card-body
+      if success
+        .alert.alert-success.alert-dismissible.fade.show(role="alert")
+          i.fas.fa-check-circle.me-2
+          | #{success}
+          button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+      
+      if error
+        .alert.alert-danger.alert-dismissible.fade.show(role="alert")
+          i.fas.fa-exclamation-circle.me-2
+          | #{error}
+          button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+      
       form(method="POST", action="/admission/assign-bed")
         input(type="hidden", name="admissionId", value=admissionId)
         
         .mb-4
           h5 Seleccione un departamento y una cama disponible:
-          each deptBeds, dept in availableBeds
-            if deptBeds.length > 0
+          each beds, department in availableBeds
+            if beds && beds.length > 0
               .card.mb-3
                 .card-header.bg-light
-                  h6.mb-0= dept.charAt(0).toUpperCase() + dept.slice(1)
+                  h6.mb-0= department.charAt(0).toUpperCase() + department.slice(1)
                 .card-body
                   .row.g-3
-                    each bed in deptBeds
+                    each bed in beds
                       .col-md-6
                         .form-check
                           input.form-check-input(
-                            type="radio", 
-                            id=`bed-${bed.id}`, 
-                            name="bedId", 
-                            value=bed.id, 
+                            type="radio",
+                            id=`bed-${bed.id}`,
+                            name="bedId",
+                            value=bed.id,
                             required
                           )
                           label.form-check-label(for=`bed-${bed.id}`)
                             | Ala #{bed.wing}, Habitación #{bed.room_number}, Cama #{bed.bed_number}
+            else
+              .alert.alert-info No hay camas disponibles en #{department}
         
         .d-grid.gap-2.d-md-flex.justify-content-md-end
           a.btn.btn-secondary.me-md-2(href="/admission/list")
@@ -40,5 +54,3 @@ block content
           button.btn.btn-primary(type="submit")
             i.fas.fa-bed.me-1
             | Asignar Cama Seleccionada
-
-

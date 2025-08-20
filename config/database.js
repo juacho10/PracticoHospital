@@ -1,20 +1,41 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
+const poolConfig = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 5432,
+  ssl: process.env.DB_SSL === 'true' ? { 
+    rejectUnauthorized: false,
+    require: true
+  } : false,
+  connectionTimeoutMillis: 10000, // Aumentado a 10 segundos
+  idleTimeoutMillis: 30000,
+  max: 5, // Conexiones máximas reducidas
+  min: 1  // Conexiones mínimas
+};
 
-// Verificar conexión a la base de datos
-pool.query('SELECT NOW()', (err) => {
-  if (err) {
-    console.error('Error al conectar a PostgreSQL:', err);
-  } else {
-    console.log('Conexión a PostgreSQL establecida correctamente');
+const pool = new Pool(poolConfig);
+
+// Función de prueba de conexión mejorada
+async function testConnection() {
+  try {
+    const res = await pool.query('SELECT NOW() as current_time, current_user');
+    console.log('✅ Conexión a PostgreSQL exitosa:', res.rows[0]);
+    return true;
+  } catch (err) {
+    console.error('❌ Error de conexión a PostgreSQL:', err.message);
+    return false;
   }
-});
+}
 
-module.exports = pool;
+// Verificar conexión al iniciar
+testConnection();
 
-
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+  pool,
+  testConnection
+};

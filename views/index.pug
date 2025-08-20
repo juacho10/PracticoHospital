@@ -3,11 +3,11 @@ extends layout
 block content
   .row.mb-4
     .col-12
-      h2.display-6.mb-4 
-      p.text-muted Bienvenido al sistema de gestión hospitalaria
+      h2.display-6.mb-4 Bienvenido, #{user.full_name}
+      p.text-muted Sistema de Gestión Hospitalaria - Panel de Control
 
   .row.g-4
-    if user.role === 'admin' || user.role === 'recepcionista'
+    if ['admin', 'recepcionista'].includes(user.role)
       .col-md-6.col-lg-4
         .card.h-100.border-primary
           .card-header.bg-primary.text-white
@@ -27,8 +27,6 @@ block content
           | Pacientes Admitidos
         .card-body
           p.card-text Lista de pacientes actualmente en el hospital.
-          if admissionsCount
-            h3.text-success= admissionsCount
         .card-footer.bg-transparent
           a.btn.btn-success(href="/admission/list")
             i.fas.fa-list.me-1
@@ -41,8 +39,6 @@ block content
           | Todos los Pacientes
         .card-body
           p.card-text Base de datos completa de pacientes del hospital.
-          if patientsCount
-            h3.text-info= patientsCount
         .card-footer.bg-transparent
           a.btn.btn-info(href="/patient/list")
             i.fas.fa-search.me-1
@@ -60,12 +56,3 @@ block content
             a.btn.btn-warning(href="/bed/list")
               i.fas.fa-cog.me-1
               | Administrar
-
-block scripts
-  script.
-    // Ejemplo de gráfico con Chart.js
-    document.addEventListener('DOMContentLoaded', function() {
-      // Podrías implementar gráficos aquí para estadísticas
-      console.log('Dashboard cargado');
-    });
-

@@ -6,6 +6,7 @@ block content
       h3.mb-0
         i.fas.fa-plus-circle.me-2
         | Agregar Nueva Cama
+    
     .card-body
       form(method="POST", action="/bed/create")
         .row.g-3
@@ -13,14 +14,17 @@ block content
             .form-floating
               input.form-control(type="text", id="room_number", name="room_number", required)
               label(for="room_number") N° Habitación *
+          
           .col-md-3
             .form-floating
               input.form-control(type="text", id="bed_number", name="bed_number", required)
               label(for="bed_number") N° Cama *
+          
           .col-md-3
             .form-floating
               input.form-control(type="text", id="wing", name="wing", required)
               label(for="wing") Ala *
+          
           .col-md-3
             .form-floating
               select.form-select(id="department", name="department", required)
@@ -28,7 +32,7 @@ block content
                 each dept in departments
                   option(value=dept)= dept.charAt(0).toUpperCase() + dept.slice(1)
               label(for="department") Departamento *
-
+        
         .d-grid.gap-2.d-md-flex.justify-content-md-end.mt-4
           a.btn.btn-secondary.me-md-2(href="/bed/list")
             i.fas.fa-arrow-left.me-1

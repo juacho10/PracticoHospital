@@ -6,39 +6,66 @@ block content
       h3.mb-0
         i.fas.fa-bed.me-2
         | Gestión de Camas
+    
     .card-body
       .d-flex.justify-content-between.mb-4
         h5 Administración de camas y habitaciones del hospital
         a.btn.btn-success(href="/bed/create")
           i.fas.fa-plus.me-1
           | Agregar Cama
-
+      
       if beds && beds.length > 0
-        table.table.table-striped.table-hover
-          thead
-            tr
-              th Departamento
-              th Habitación
-              th Cama
-              th Ala
-              th Estado
-              th Acciones
-          tbody
-            each bed in beds
+        .table-responsive
+          table.table.table-striped.table-hover
+            thead
               tr
-                td= bed.department
-                td= bed.room_number
-                td= bed.bed_number
-                td= bed.wing
-                td
-                  form.form-inline(method="POST", action="/bed/update-status")
-                    input(type="hidden", name="bedId", value=bed.id)
-                    select.form-select(name="status", onchange="this.form.submit()")
-                      each status in bedStatuses
-                        option(value=status, selected=bed.status === status)= status
-                td
-                  a.btn.btn-sm.btn-danger(href=`/bed/delete/${bed.id}`, onclick="return confirm('¿Está seguro?')")
-                    i.fas.fa-trash.me-1
-                    | Eliminar
+                th Departamento
+                th Habitación
+                th Cama
+                th Ala
+                th Estado
+                th Acciones
+            tbody
+              each bed in beds
+                tr
+                  td= bed.department.charAt(0).toUpperCase() + bed.department.slice(1)
+                  td= bed.room_number
+                  td= bed.bed_number
+                  td= bed.wing
+                  td
+                    span.badge(class={
+                      'bg-success': bed.status === 'disponible',
+                      'bg-danger': bed.status === 'ocupada',
+                      'bg-warning': bed.status === 'en_mantenimiento'
+                    })= bed.status.charAt(0).toUpperCase() + bed.status.slice(1)
+                  td
+                    .dropdown
+                      button.btn.btn-sm.btn-secondary.dropdown-toggle(type="button", data-bs-toggle="dropdown")
+                        i.fas.fa-cog
+                      ul.dropdown-menu
+                        li
+                          form(method="POST", action="/bed/update-status")
+                            input(type="hidden", name="bedId", value=bed.id)
+                            button.dropdown-item(type="submit", name="status", value="disponible") 
+                              i.fas.fa-check-circle.text-success.me-2
+                              | Disponible
+                        li
+                          form(method="POST", action="/bed/update-status")
+                            input(type="hidden", name="bedId", value=bed.id)
+                            button.dropdown-item(type="submit", name="status", value="ocupada") 
+                              i.fas.fa-bed.text-danger.me-2
+                              | Ocupada
+                        li
+                          form(method="POST", action="/bed/update-status")
+                            input(type="hidden", name="bedId", value=bed.id)
+                            button.dropdown-item(type="submit", name="status", value="en_mantenimiento") 
+                              i.fas.fa-tools.text-warning.me-2
+                              | Mantenimiento
+                        li
+                          hr.dropdown-divider
+                        li
+                          a.dropdown-item.text-danger(href=`/bed/delete/${bed.id}`, onclick="return confirm('¿Está seguro?')")
+                            i.fas.fa-trash.me-2
+                            | Eliminar
       else
         .alert.alert-info No hay camas registradas

@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  .card.shadow
+    .card-header.bg-danger.text-white
+      h3.mb-0
+        i.fas.fa-exclamation-triangle.me-2
+        | #{title}
+    
+    .card-body.text-center
+      i.fas.fa-bug.fa-4x.text-danger.mb-4
+      h4= message
+      a.btn.btn-primary.mt-4(href="/")
+        i.fas.fa-home.me-2
+        | Volver al inicio

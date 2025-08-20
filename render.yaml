@@ -1,5 +1,5 @@
 databases:
-  - name: his_hospital_db
+  - name: his_hospital
     databaseName: his_hospital
     user: his_admin
     plan: free
@@ -15,9 +15,21 @@ services:
         value: production
       - key: SESSION_SECRET
         generateValue: true
-      - key: DATABASE_URL
+      - key: DB_HOST
         fromDatabase:
-          name: his_hospital_db
-          property: connectionString
-      - key: PORT
-        value: 10000
+          name: his_hospital
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: his_hospital
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: his_hospital
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: his_hospital
+          property: databaseName
+      - key: DB_SSL
+        value: "true"

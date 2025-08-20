@@ -4,10 +4,17 @@ block content
   .row.justify-content-center
     .col-md-6.col-lg-4
       .card.shadow
-        .card-body.p-4
-          h2.card-title.text-center.mb-4
+        .card-header.bg-primary.text-white
+          h3.text-center.mb-0
             i.fas.fa-sign-in-alt.me-2
             | Iniciar Sesión
+        
+        .card-body
+          if error
+            .alert.alert-danger.alert-dismissible.fade.show(role="alert")
+              i.fas.fa-exclamation-circle.me-2
+              | #{error}
+              button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
           
           form(method="POST", action="/auth/login")
             .mb-3
@@ -15,32 +22,28 @@ block content
               .input-group
                 span.input-group-text
                   i.fas.fa-user
-                input.form-control(type="text", id="username", name="username", required, autofocus)
-              .invalid-feedback Por favor ingrese su usuario
+                input.form-control(
+                  type="text",
+                  id="username",
+                  name="username",
+                  required,
+                  autofocus,
+                  value=username || ''
+                )
             
             .mb-3
               label.form-label(for="password") Contraseña
               .input-group
                 span.input-group-text
                   i.fas.fa-lock
-                input.form-control(type="password", id="password", name="password", required)
-              .invalid-feedback Por favor ingrese su contraseña
+                input.form-control(
+                  type="password",
+                  id="password",
+                  name="password",
+                  required
+                )
             
-            .mb-3.form-check
-              input.form-check-input(type="checkbox", id="remember", name="remember")
-              label.form-check-label(for="remember") Recordar mi usuario
-            
-            .d-grid.gap-2
+            .d-grid.gap-2.mt-4
               button.btn.btn-primary(type="submit")
                 i.fas.fa-sign-in-alt.me-2
                 | Ingresar
-            
-            if error
-              .alert.alert-danger.mt-3.mb-0
-                i.fas.fa-exclamation-circle.me-2
-                | #{error}
-        
-        .card-footer.text-center.bg-transparent
-          small.text-muted ¿Problemas para ingresar? 
-            a(href="#") Contacte al administrador
-
