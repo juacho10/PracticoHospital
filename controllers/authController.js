@@ -11,55 +11,36 @@ exports.loginForm = (req, res) => {
 exports.login = async (req, res) => {
   const { username, password } = req.body;
   console.log('Intento de login para:', username);
-  
+
   try {
-    // Validación básica
     if (!username || !password) {
       req.flash('error', 'Usuario y contraseña son requeridos');
       return res.redirect('/auth/login');
     }
 
-    // Buscar usuario
     const user = await User.findByUsername(username);
     if (!user) {
       req.flash('error', 'Credenciales inválidas');
       return res.redirect('/auth/login');
     }
 
-    // Comparar contraseñas
     const isMatch = await User.comparePassword(password, user.password);
     if (!isMatch) {
       req.flash('error', 'Credenciales inválidas');
       return res.redirect('/auth/login');
     }
-    
-    // Crear sesión
-    req.session.regenerate((err) => {
-      if (err) {
-        console.error('Error al regenerar sesión:', err);
-        return res.redirect('/auth/login');
-      }
-      
-      req.session.user = {
-        id: user.id,
-        username: user.username,
-        full_name: user.full_name,
-        role: user.role
-      };
-      
-      req.session.save((err) => {
-        if (err) {
-          console.error('Error al guardar sesión:', err);
-          req.flash('error', 'Error del servidor');
-          return res.redirect('/auth/login');
-        }
-        
-        console.log('Sesión guardada correctamente:', req.sessionID);
-        req.flash('success', `Bienvenido ${user.full_name}`);
-        return res.redirect('/');
-      });
-    });
-    
+
+    // SIMPLIFICA la creación de sesión
+    req.session.user = {
+      id: user.id,
+      username: user.username,
+      full_name: user.full_name,
+      role: user.role
+    };
+
+    req.flash('success', `Bienvenido ${user.full_name}`);
+    return res.redirect('/');
+
   } catch (error) {
     console.error('Error en login:', error);
     req.flash('error', 'Error del servidor');

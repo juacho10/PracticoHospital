@@ -23,11 +23,14 @@ class User {
 
   static async comparePassword(candidatePassword, hashedPassword) {
   try {
-    // Asegúrate de que no haya espacios en blanco
-    const cleanCandidate = candidatePassword.trim();
+    if (!candidatePassword || !hashedPassword) {
+      return false;
+    }
+    
+    const cleanCandidate = candidatePassword.toString().trim();
     const result = await bcrypt.compare(cleanCandidate, hashedPassword);
-    console.log(`Comparando: "${cleanCandidate}" con hash: ${hashedPassword} → ${result}`);
     return result;
+    
   } catch (error) {
     console.error('Error en comparePassword:', error);
     return false;

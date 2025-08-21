@@ -27,8 +27,8 @@ const sessionStore = new pgSession({
   pool: pool,
   tableName: 'session',
   createTableIfMissing: true,
-  ttl: 86400, // 1 día en segundos
-  pruneSessionInterval: false, // Desactiva el pruning automático
+  ttl: 86400,
+  pruneSessionInterval: false,
   errorLog: console.error
 });
 
@@ -37,18 +37,28 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret-key',
   resave: false,
   saveUninitialized: false,
-  proxy: true, // Importante para producción
+  proxy: true,
   cookie: {
-    secure: false, // Cambiar a true solo en producción con HTTPS
-    maxAge: 24 * 60 * 60 * 1000, // 1 día
+    secure: process.env.NODE_ENV === 'production', // TRUE en producción
+    maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    sameSite: 'lax',
-    domain: 'localhost' // Asegúrate que coincida con tu dominio de desarrollo
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    
   }
 }));
 
 app.use(flash());
-
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 // Variables globales
 app.use((req, res, next) => {
   console.log('Sesión actual:', req.session);
