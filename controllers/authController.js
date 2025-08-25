@@ -10,7 +10,6 @@ exports.loginForm = (req, res) => {
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
-  console.log('Intento de login para:', username);
 
   try {
     if (!username || !password) {
@@ -30,7 +29,7 @@ exports.login = async (req, res) => {
       return res.redirect('/auth/login');
     }
 
-    // SIMPLIFICA la creación de sesión
+    // ✅ Sesión simplificada y robusta
     req.session.user = {
       id: user.id,
       username: user.username,
@@ -38,8 +37,16 @@ exports.login = async (req, res) => {
       role: user.role
     };
 
-    req.flash('success', `Bienvenido ${user.full_name}`);
-    return res.redirect('/');
+    req.session.save((err) => {
+      if (err) {
+        console.error('Error al guardar sesión:', err);
+        req.flash('error', 'Error del servidor');
+        return res.redirect('/auth/login');
+      }
+      
+      req.flash('success', `Bienvenido ${user.full_name}`);
+      return res.redirect('/');
+    });
 
   } catch (error) {
     console.error('Error en login:', error);

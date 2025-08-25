@@ -37,15 +37,16 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret-key',
   resave: false,
   saveUninitialized: false,
-  proxy: true,
+  proxy: true, // ✅ IMPORTANTE para producción
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // TRUE en producción
+    secure: process.env.NODE_ENV === 'production', // ✅ true solo en producción
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // ✅ 'none' para producción
+    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : 'localhost' // ✅ dominio correcto
   }
 }));
+
 
 app.use(flash());
 app.use((req, res, next) => {

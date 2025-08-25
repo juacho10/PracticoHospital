@@ -7,14 +7,14 @@ const poolConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT || 5432,
-  ssl: process.env.DB_SSL === 'true' ? { 
-    rejectUnauthorized: false,
+  ssl: process.env.DB_SSL === 'true' ? {
+    rejectUnauthorized: false, // ✅ Necesario para Render PostgreSQL
     require: true
   } : false,
-  connectionTimeoutMillis: 10000, // Aumentado a 10 segundos
-  idleTimeoutMillis: 30000,
-  max: 5, // Conexiones máximas reducidas
-  min: 1  // Conexiones mínimas
+  connectionTimeoutMillis: 30000, // ✅ Aumentado a 30s
+  idleTimeoutMillis: 60000,
+  max: 10, // ✅ Más conexiones para producción
+  min: 2
 };
 
 const pool = new Pool(poolConfig);
